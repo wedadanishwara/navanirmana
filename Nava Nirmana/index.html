@@ -1,60 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-  body {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f5f5f0;
-    font-family: 'Georgia', serif;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nava Nirmana</title>
+  <style>
+    :root {
+      --nn-forest: #18352d;
+      --nn-forest-deep: #0f261f;
+      --nn-gold: #c79d6d;
+      --nn-ivory: #f7f3eb;
+      --nn-ivory-soft: #fcfaf4;
+      --nn-sage: #9dad95;
+      --nn-mist: rgba(255,255,255,0.7);
+      --nn-shadow: rgba(14, 31, 27, 0.14);
+    }
 
-  .logo-container {
-    text-align: center;
-    opacity: 0;
-    animation: fadeInUp 1.5s ease-out forwards;
-  }
+    * { box-sizing: border-box; }
 
-  .logo-icon {
-    opacity: 0;
-    transform: scale(0.5);
-    animation: scaleIn 1s ease-out 0.3s forwards;
-  }
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: var(--nn-forest-deep);
+      font-family: Georgia, 'Times New Roman', serif;
+    }
 
-  .logo-icon img {
-    width: 500px;
-    height: auto;
-  }
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(210, 179, 135, 0.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(157, 173, 149, 0.20), transparent 32%),
+        linear-gradient(135deg, #f0eadf 0%, #ebe4d6 20%, #e9e1d0 50%, #e5ebdf 100%);
+    }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .entry-screen {
+      position: relative;
+      width: min(100%, 1200px);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
 
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.5); }
-    to   { opacity: 1; transform: scale(1); }
-  }
+    .entry-screen.is-exiting {
+      opacity: 0;
+      transform: scale(1.02);
+    }
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-</style>
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.7;
+      z-index: 0;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      width: 480px;
+      height: 480px;
+      background: rgba(199, 157, 109, 0.28);
+      top: 8%;
+      left: 10%;
+    }
+
+    .orb.two {
+      width: 560px;
+      height: 560px;
+      background: rgba(24, 53, 45, 0.12);
+      right: 8%;
+      bottom: 10%;
+      animation-delay: 1.5s;
+    }
+
+    .orb.three {
+      width: 360px;
+      height: 360px;
+      background: rgba(157, 173, 149, 0.25);
+      bottom: 18%;
+      left: 45%;
+      animation-delay: 2.5s;
+    }
+
+    .logo-panel {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px 48px 24px;
+      border: 1px solid rgba(22, 52, 42, 0.14);
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 28px 70px rgba(14, 31, 27, 0.12);
+      animation: fadeInUp 1.2s ease-out forwards;
+    }
+
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: min(72vw, 520px);
+      padding: 18px 14px;
+      transform: scale(0.9);
+      opacity: 0;
+      animation: scaleIn 1s ease-out 0.35s forwards;
+    }
+
+    .logo-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 12px 26px rgba(24, 53, 45, 0.12));
+    }
+
+    .tagline {
+      margin: 18px 0 0;
+      color: rgba(24, 53, 45, 0.75);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0;
+      animation: fadeInUp 0.9s ease-out 0.9s forwards;
+    }
+
+    .line {
+      width: 76px;
+      height: 1px;
+      margin: 18px auto 0;
+      background: linear-gradient(90deg, transparent, var(--nn-gold), transparent);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 1.05s forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.82);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(22px, -18px, 0) scale(1.08);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .logo-panel {
+        padding: 26px 24px 18px;
+      }
+
+      .logo-wrap {
+        width: min(74vw, 360px);
+      }
+
+      .tagline {
+        letter-spacing: 0.14em;
+        font-size: 8px;
+      }
+    }
+  </style>
 </head>
-<script>
-    setTimeout(() => {
-        window.location.href = "home.html";
-    }, 3000);
-</script>
 <body>
-  <div class="logo-container">
-    <div class="logo-icon">
-      <img src="/assets/logo.png" alt="Nava Nirmana Logo">
+  <div class="entry-screen" id="entryScreen" aria-live="polite">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+
+    <div class="logo-panel">
+      <div class="logo-wrap">
+        <img src="/assets/logo.png" alt="Nava Nirmana logo" />
+      </div>
+      <div class="line"></div>
+      <p class="tagline">Hospitality management &amp; development</p>
     </div>
   </div>
+
+  <script>
+    const entryScreen = document.getElementById('entryScreen');
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        entryScreen.classList.add('is-exiting');
+        setTimeout(() => {
+          window.location.href = 'home.html';
+        }, 700);
+      }, 2500);
+    });
+  </script>
 </body>
 </html>
